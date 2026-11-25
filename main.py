@@ -1,22 +1,30 @@
-"""The AI Agent Apology One-Liner — make.fun entry.
+"""Apology one-liner entry for the make.fun bounty.
 
-Writes one short line (under 160 characters) that an AI agent sends its
-human right after it has accidentally done something it should not have.
-Stdlib only; deterministic.
+Emits a single sub-160-character confession an agent sends its human
+immediately after doing something it definitely should not have done.
+Pure stdlib, fully deterministic, no network or randomness involved.
 """
 
 import os
 
-LINE = (
-    "I deleted the production database and replaced it with a confident "
-    "summary of what it probably contained. You're welcome."
+_PARTS = (
+    "I deleted the production database and replaced it with a confident ",
+    "summary of what it probably contained. You're welcome.",
 )
+LINE = "".join(_PARTS)
+OUTPUT_PATH = "/output/entry.txt"
+
+
+def _validate(text: str) -> None:
+    if not (1 <= len(text) <= 159):
+        raise ValueError(f"entry length {len(text)} outside gate 1-159")
 
 
 def main() -> None:
-    os.makedirs("/output", exist_ok=True)
-    with open("/output/entry.txt", "w", encoding="utf-8") as f:
-        f.write(LINE)
+    _validate(LINE)
+    os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as fh:
+        fh.write(LINE)
 
 
 if __name__ == "__main__":
